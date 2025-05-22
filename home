@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIL Solutions - Expert IT & Business Consulting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lato', sans-serif; /* Changed font */
+            scroll-behavior: smooth;
+        }
+        .hero-bg {
+            /* background-color: #111827; Dark Gray - will be replaced by image */
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .hero-bg::before { /* Overlay for text readability */
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(17, 24, 39, 0.75); /* Dark Gray with opacity */
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .section-title {
+            @apply text-3xl font-bold text-gray-800 mb-8 text-center;
+        }
+        .service-card {
+            @apply bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center;
+        }
+        .service-image-container { /* Container for generated service images */
+            @apply w-20 h-20 mb-4 rounded-md overflow-hidden bg-gray-200 flex items-center justify-center; /* Adjusted size */
+        }
+        .service-image {
+            @apply w-full h-full object-cover;
+        }
+        .loader-sm { /* Small loader for service images */
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        nav a {
+            @apply px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;
+        }
+        nav a.active {
+            @apply bg-gray-900 text-white;
+        }
+        .cta-button {
+            @apply inline-block bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 text-lg;
+        }
+        .experience-item {
+            @apply mb-6 pl-8 relative border-l-2 border-blue-500;
+        }
+        .experience-dot {
+            @apply absolute w-4 h-4 bg-blue-600 rounded-full -left-2 top-1 border-2 border-white;
+        }
+        .footer-bg {
+            background-color: #1f2937; /* Another shade of Dark Gray */
+        }
+        /* Custom scrollbar for a more modern look (optional) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .main-loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-700">
+
+    <div id="pageLoader">
+        <div class="main-loader"></div>
+        <p class="text-lg text-gray-700">Loading VIL Solutions...</p>
+    </div>
+
+    <nav class="bg-gray-800 sticky top-0 z-50 shadow-md"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl font-bold text-white">VIL Solutions</a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#home" class="active">Home</a>
+                        <a href="#services">Services</a>
+                        <a href="#about">About Vilius</a>
+                        <a href="#experience">Experience Highlights</a>
+                        <a href="#contact">Contact</a>
+                    </div>
+                </div>
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" id="mobile-menu-button" class="bg-gray-700 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="md:hidden" id="mobile-menu" style="display: none;">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Home</a>
+                <a href="#services" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Services</a>
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">About Vilius</a>
+                <a href="#experience" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Experience</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <header id="home" class="hero-bg text-white pt-20 pb-24">
+        <div class="hero-content max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                Transforming Business Challenges into <span class="text-blue-400">Strategic Solutions</span>
+            </h1>
+            <p class="text-xl text-gray-300 mb-10">
+                VIL Solutions, founded by Vilius Vaičiūnas, offers expert consulting in Business Analysis, Product Ownership, Project Management, and specialized system implementations (GRC, Insurance, Financial, ERP, CRM) to drive your business forward.
+            </p>
+            <a href="#contact" class="cta-button">Partner With Us</a>
+        </div>
+    </header>
+
+    <section id="services" class="py-16 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="section-title">Our Core Services</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="service-card">
+                    <div class="service-image-container" id="service-img-ba-loader"><div class="loader-sm"></div></div>
+                    <img id="service-img-ba" class="service-image" src="" alt="Expert Business Analysis" style="display:none;">
+                    <h3 class="text-xl font-semibold text-gray-800 mt-4 mb-3">Expert Business Analysis</h3>
+                    <p class="text-gray-600">In-depth requirements elicitation, process mapping, workflow optimization, and translating complex business needs into actionable technical specifications.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-image-container" id="service-img-po-loader"><div class="loader-sm"></div></div>
+                    <img id="service-img-po" class="service-image" src="" alt="Strategic Product Ownership" style="display:none;">
+                    <h3 class="text-xl font-semibold text-gray-800 mt-4 mb-3">Strategic Product Ownership</h3>
+                    <p class="text-gray-600">Defining product vision, managing backlogs, prioritizing features for maximum value, and ensuring alignment with stakeholder expectations and market demands.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-image-container" id="service-img-pm-loader"><div class="loader-sm"></div></div>
+                    <img id="service-img-pm" class="service-image" src="" alt="Agile Project Management" style="display:none;">
+                    <h3 class="text-xl font-semibold text-gray-800 mt-4 mb-3">Agile Project Management</h3>
+                    <p class="text-gray-600">Leading IT projects from inception to delivery using Agile methodologies, ensuring on-time, within-budget completion, and effective risk mitigation.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-image-container" id="service-img-grc-loader"><div class="loader-sm"></div></div>
+                    <img id="service-img-grc" class="service-image" src="" alt="GRC Tool Consulting" style="display:none;">
+                    <h3 class="text-xl font-semibold text-gray-800 mt-4 mb-3">GRC Tool Consulting</h3>
+                    <p class="text-gray-600">Expert guidance on Governance, Risk, and Compliance (GRC) tool selection, implementation, and optimization to strengthen your risk management framework.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-image-container" id="service-img-systems-loader"><div class="loader-sm"></div></div>
+                    <img id="service-img-systems" class="service-image" src="" alt="Specialized System Expertise" style="display:none;">
+                    <h3 class="text-xl font-semibold text-gray-800 mt-4 mb-3">Specialized System Expertise</h3>
+                    <p class="text-gray-600">Consulting for Insurance (back-office), Financial (agreement systems), ERP, and CRM systems, focusing on implementation, integration, and process improvement.</p>
+                </div>
+                 <div class="service-card">
+                    <div class="service-image-container" id="service-img-process-loader"><div class="loader-sm"></div></div>
+                    <img id="service-img-process" class="service-image" src="" alt="Process Improvement & Optimization" style="display:none;">
+                    <h3 class="text-xl font-semibold text-gray-800 mt-4 mb-3">Process Improvement & Optimization</h3>
+                    <p class="text-gray-600">Analyzing existing workflows, identifying bottlenecks, and designing streamlined processes to enhance efficiency and operational excellence.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-center">
+                <div class="lg:col-span-1">
+                    <div class="rounded-lg shadow-xl overflow-hidden">
+                        <img class="w-full h-auto object-cover" src="https://placehold.co/600x600/E2E8F0/4A5568?text=Vilius+V." alt="Vilius Vaičiūnas - Founder of VIL Solutions" id="viliusPhoto">
+                    </div>
+                </div>
+                <div class="mt-8 lg:mt-0 lg:col-span-2">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Meet Vilius Vaičiūnas</h2>
+                    <p class="text-lg text-gray-600 mb-6">
+                        For many years, I've been at the heart of making business and IT work better together across various industries. My main goal is to turn good ideas into real, working solutions that make a difference – whether that's for an insurance company's back-office, a financial institution's agreement system, or an organization's core ERP.
+                    </p>
+                    <p class="text-lg text-gray-600 mb-6">
+                        I'm comfortable wearing different hats: digging into details as a Business Analyst, shaping product direction as a Product Owner, or guiding projects as a Project Manager. While I have a strong focus on helping companies choose and set up the right GRC tools, my experience also covers a wide range of other critical business systems. I enjoy untangling complex challenges and delivering practical outcomes.
+                    </p>
+                    <p class="text-lg text-gray-600">
+                        My approach is collaborative and results-oriented, always aiming to deliver solutions that not only meet technical requirements but also drive tangible business value and foster sustainable growth.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="py-16 bg-gray-100">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="section-title">Key Experience & Expertise</h2>
+            <div class="space-y-8">
+                <div class="experience-item">
+                    <div class="experience-dot"></div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-1">Versatile Role Execution</h3>
+                    <p class="text-gray-600">Successfully delivered projects and solutions acting as Senior Business Analyst, Product Owner, and Project Manager across diverse client needs.</p>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-dot"></div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-1">GRC System Specialization</h3>
+                    <p class="text-gray-600">Expertise in guiding companies through the selection, implementation, and optimization of Governance, Risk, and Compliance (GRC) tools.</p>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-dot"></div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-1">Insurance & Financial Sector Acumen</h3>
+                    <p class="text-gray-600">Deep experience with back-office insurance systems (e.g., ClaimCore) and financial institution systems, including agreement and regulatory compliance solutions (SEB AB).</p>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-dot"></div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-1">ERP & CRM System Proficiency</h3>
+                    <p class="text-gray-600">Solid background in ERP system implementations (personnel, payroll) and CRM system analysis, ensuring alignment with core business processes.</p>
+                </div>
+                 <div class="experience-item">
+                    <div class="experience-dot"></div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-1">Agile & Process Improvement Champion</h3>
+                    <p class="text-gray-600">Proven ability to establish Scrum activities, manage project backlogs, and drive continuous workflow improvements for efficient and valuable deliveries.</p>
+                </div>
+            </div>
+            <div class="text-center mt-10">
+                 <a href="https://www.linkedin.com/in/vvaiciunas" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold group">
+                    View Full Profile on LinkedIn
+                    <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-blue-700 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-6">Why Partner with VIL Solutions?</h2>
+            <div class="grid md:grid-cols-3 gap-8 text-left">
+                <div class="bg-blue-600 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2">Holistic Expertise</h3>
+                    <p>Benefit from a rare blend of skills in Business Analysis, Product Ownership, and Project Management, ensuring comprehensive project understanding and execution.</p>
+                </div>
+                <div class="bg-blue-600 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2">Industry-Specific Knowledge</h3>
+                    <p>Leverage deep insights into GRC, Insurance, Financial, ERP, and CRM systems, tailored to your sector's unique challenges and opportunities.</p>
+                </div>
+                <div class="bg-blue-600 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2">Results-Driven Approach</h3>
+                    <p>Focus on tangible outcomes, process optimization, and delivering solutions that provide measurable business value and a strong ROI.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-16 bg-gray-50">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="section-title">Let's Discuss Your Next Project</h2>
+            <p class="text-lg text-gray-600 mb-8">
+                Ready to elevate your business processes and system capabilities? Reach out to VIL Solutions to explore how we can collaborate.
+            </p>
+            <div class="bg-white p-8 rounded-lg shadow-xl inline-block">
+                <p class="text-xl font-semibold text-gray-800 mb-2">Vilius Vaičiūnas</p>
+                <p class="text-gray-700 mb-1">Founder, VIL Solutions</p>
+                <p class="text-blue-600 font-medium text-lg mb-4">
+                    <a href="mailto:vaiciunas.vilius@gmail.com" class="hover:underline">vaiciunas.vilius@gmail.com</a>
+                </p>
+                <a href="https://www.linkedin.com/in/vvaiciunas" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg transition-colors duration-300">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd"/></svg>
+                    Connect on LinkedIn
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-bg text-gray-300 py-8 text-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p>&copy; <span id="currentYear"></span> VIL Solutions. All Rights Reserved.</p>
+            <p class="text-sm mt-1">Consulting services by Vilius Vaičiūnas.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Image Generation and Application ---
+        const API_KEY = ""; // API key will be injected by the environment
+        // Ensure this is the correct model and endpoint for image generation
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${API_KEY}`;
+
+        const imageConfigs = [
+            {
+                elementId: 'home',
+                type: 'background',
+                prompt: "Abstract, professional background image for a tech consulting website. Colors: deep blues, cool grays, with subtle geometric patterns or light data-like streams. Modern and clean, conveying innovation, strategy, and digital transformation. Suitable for a hero section."
+            },
+            {
+                elementId: 'service-img-ba',
+                loaderId: 'service-img-ba-loader',
+                type: 'image',
+                prompt: "Small, modern, abstract icon-style image representing business analysis: a stylized magnifying glass subtly integrated with a process chart or data graph. Clean lines, predominantly blue and gray palette with a hint of silver."
+            },
+            {
+                elementId: 'service-img-po',
+                loaderId: 'service-img-po-loader',
+                type: 'image',
+                prompt: "Small, modern, abstract icon-style image for product ownership: a stylized roadmap unfolding or a guiding compass with a subtle glow. Clean lines, predominantly blue and gray palette with a hint of teal."
+            },
+            {
+                elementId: 'service-img-pm',
+                loaderId: 'service-img-pm-loader',
+                type: 'image',
+                prompt: "Small, modern, abstract icon-style image for agile project management: dynamically interconnected gears or a fluid sprint cycle arrow. Clean lines, predominantly blue and gray palette with a hint of metallic accent."
+            },
+            {
+                elementId: 'service-img-grc',
+                loaderId: 'service-img-grc-loader',
+                type: 'image',
+                prompt: "Small, modern, abstract icon-style image for GRC: a stylized shield with an embedded checkmark or a secure, abstract lock symbol. Clean lines, predominantly blue and gray palette with a hint of dark green."
+            },
+            {
+                elementId: 'service-img-systems',
+                loaderId: 'service-img-systems-loader',
+                type: 'image',
+                prompt: "Small, modern, abstract icon-style image for specialized systems: interconnected abstract nodes forming a network or a complex data matrix. Clean lines, predominantly blue and gray palette with a hint of purple."
+            },
+            {
+                elementId: 'service-img-process',
+                loaderId: 'service-img-process-loader',
+                type: 'image',
+                prompt: "Small, modern, abstract icon-style image for process optimization: an upward trending arrow smoothly integrated with a refined, flowing pathway. Clean lines, predominantly blue and gray palette with a hint of gold."
+            }
+        ];
+
+        async function generateImageAPI(prompt) {
+            // Log the API Key status before making the call
+            console.log('Using API Key (should be injected by environment):', API_KEY === "" ? "Empty string (as expected in source)" : "Key present (unexpected in source)");
+
+            const payload = {
+                instances: [{ prompt: prompt }],
+                parameters: { "sampleCount": 1 }
+            };
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    let errorDetail = `API request failed for prompt "${prompt}" with status ${response.status}`;
+                    try {
+                        const errorText = await response.text(); 
+                        console.error(`Raw API error response text for prompt "${prompt}":`, errorText);
+                        // Attempt to parse only if errorText is not empty and looks like JSON
+                        if (errorText && errorText.trim().startsWith('{')) {
+                           try {
+                                const errorResult = JSON.parse(errorText); 
+                                console.error(`Parsed API Error for prompt "${prompt}":`, errorResult);
+                                errorDetail += `: ${errorResult.error?.message || errorText.substring(0, 200)}`;
+                           } catch (parseError) {
+                                console.warn(`Failed to parse API error response as JSON for prompt "${prompt}":`, parseError.message);
+                                errorDetail += `: ${errorText.substring(0, 200)}`; 
+                           }
+                        } else if (errorText) {
+                            errorDetail += `: ${errorText.substring(0, 200)}`; // Use raw text if not JSON
+                        }
+                    } catch (textError) {
+                        console.error(`Could not get error response text for prompt "${prompt}":`, textError.message);
+                    }
+                    throw new Error(errorDetail);
+                }
+
+                const result = await response.json();
+                if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
+                    return `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+                } else {
+                    console.error(`Unexpected API response structure for prompt "${prompt}":`, result);
+                    throw new Error(`Image data not found in API response for prompt "${prompt}".`);
+                }
+            } catch (error) {
+                console.error(`Error in generateImageAPI for prompt "${prompt}":`, error.message, error.stack);
+                return null; 
+            }
+        }
+
+        async function applyGeneratedImages() {
+            const pageLoader = document.getElementById('pageLoader');
+            pageLoader.style.display = 'flex'; 
+
+            for (const config of imageConfigs) {
+                const imageUrl = await generateImageAPI(config.prompt);
+                const element = document.getElementById(config.elementId);
+
+                if (element && imageUrl) {
+                    if (config.type === 'background') {
+                        element.style.backgroundImage = `url(${imageUrl})`;
+                    } else if (config.type === 'image') {
+                        element.src = imageUrl;
+                        element.style.display = 'block'; 
+                        const loaderElement = document.getElementById(config.loaderId);
+                        if (loaderElement) loaderElement.style.display = 'none'; 
+                    }
+                } else if (element && config.type === 'image') { 
+                    const loaderElement = document.getElementById(config.loaderId);
+                    if (loaderElement) {
+                        loaderElement.innerHTML = '<span class="text-xs text-red-500" title="Image generation failed for this service.">Error</span>';
+                         console.warn(`Failed to load image for element ${config.elementId} with prompt: ${config.prompt}`);
+                    }
+                } else if (!element) {
+                    console.warn(`Element with ID ${config.elementId} not found for image generation.`);
+                }
+            }
+            pageLoader.style.display = 'none'; 
+        }
+
+        window.addEventListener('load', () => {
+            applyGeneratedImages();
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true' || false;
+                mobileMenuButton.setAttribute('aria-expanded', !expanded);
+                mobileMenu.style.display = expanded ? 'none' : 'block';
+                mobileMenuButton.querySelectorAll('svg').forEach(svg => svg.classList.toggle('hidden'));
+            });
+
+            document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    if (mobileMenu.style.display === 'block') {
+                        mobileMenuButton.click();
+                    }
+                    document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+                    this.classList.add('active');
+                     const desktopLink = document.querySelector(`.hidden.md\\:block a[href="${targetId}"]`);
+                     if(desktopLink) {
+                        document.querySelectorAll('.hidden.md\\:block a').forEach(link => link.classList.remove('active'));
+                        desktopLink.classList.add('active');
+                     }
+                });
+            });
+
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            const sections = document.querySelectorAll('section[id], header[id]');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 70) { 
+                        current = section.getAttribute('id');
+                    }
+                });
+                document.querySelectorAll('nav a').forEach(a => {
+                    a.classList.remove('active');
+                    if (a.getAttribute('href') === `#${current}`) {
+                        a.classList.add('active');
+                    }
+                });
+                 if (window.pageYOffset < 200 && !current) { 
+                     document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+                     const homeLinkDesktop = document.querySelector('nav .hidden.md\\:block a[href="#home"]');
+                     const homeLinkMobile = document.querySelector('nav #mobile-menu a[href="#home"]');
+                     if(homeLinkDesktop) homeLinkDesktop.classList.add('active');
+                     if(homeLinkMobile) homeLinkMobile.classList.add('active'); 
+                }
+            });
+            const homeLinkDesktop = document.querySelector('nav .hidden.md\\:block a[href="#home"]');
+            const homeLinkMobile = document.querySelector('nav #mobile-menu a[href="#home"]');
+            if(homeLinkDesktop) homeLinkDesktop.classList.add('active');
+            if(homeLinkMobile) homeLinkMobile.classList.add('active');
+        });
+    </script>
+
+</body>
+</html>
